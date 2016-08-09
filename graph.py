@@ -42,13 +42,6 @@ class Graph:
 
         del self._graph[u]
 
-    def count_vertices(self):
-        """
-        Return the number of vertices in the graph
-        """
-
-        return len(self._graph)
-
     def vertices(self):
         """
         Return a list of graph vertices
@@ -56,11 +49,24 @@ class Graph:
 
         return list(self._graph.keys())
 
+    def count_vertices(self):
+        """
+        Return the number of vertices in the graph
+        """
+
+        return len(self._graph)
+
+    def edges(self, u):
+        """
+        Return a list of edges connected to a given vertex u
+        """
+
+        return self._graph[u]
+
     def count_edges(self, u):
         """
         Return a number of edges connected to a given vertex u
         """
 
-        return len(self._graph[u])
-
+        return len(self.edges(u))
 
