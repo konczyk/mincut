@@ -22,16 +22,17 @@ class MinCut:
                 self._mincut = cut
 
     def _find_mincut(self):
+        """
+        Run the contraction algorithm for a given graph and return the
+        mincut found
+        """
+
         v = self._graph.v()
         edges = list(self._graph.edges())
 
-        def pick():
-            e = random.choice(edges)
-            return e if e[0] != e[1] else pick()
-
         while v > 2:
             # pick a random edge and contract
-            p, q = pick()
+            p, q = random.choice(edges)
             # replace p--q connections with r--q ones
             for i in range(len(edges)):
                 edge = edges[i]
