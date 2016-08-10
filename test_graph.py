@@ -19,36 +19,14 @@ class GraphTest(unittest.TestCase):
     def test_empty(self):
         graph = Graph([])
 
-        self.assertEqual(graph.count_vertices(), 0)
+        self.assertEqual(graph.v(), 0)
 
     def test_create_graph(self):
         graph = Graph(self.data)
 
-        self.assertEqual(graph.count_vertices(), 4)
-
-    def test_contract_edge(self):
-        graph = Graph(self.data)
-
-        graph.contract_edge(0, 2)
-
-        self.assertEqual(graph.count_vertices(), 3)
-
-        self.assertListEqual(sorted(graph.edges(2)), [1, 1, 3])
-        self.assertListEqual(sorted(graph.edges(1)), [2, 2, 3])
-
-        self.assertEqual(graph.count_edges(2), 3)
-        self.assertEqual(graph.count_edges(1), 3)
-
-    def test_min_cut(self):
-        graph = Graph(self.data)
-
-        graph.contract_edge(0, 2)
-        graph.contract_edge(1, 2)
-
-        self.assertListEqual(sorted(graph.vertices()), [2, 3])
-
-        self.assertListEqual(graph.edges(2), [3, 3])
-        self.assertListEqual(graph.edges(3), [2, 2])
+        self.assertEqual(graph.v(), 4)
+        self.assertCountEqual(graph.edges(), [(0, 1), (0, 2), (1, 2), (1, 3),
+                                              (2, 3)])
 
 
 if __name__ == '__main__':

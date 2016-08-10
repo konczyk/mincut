@@ -23,9 +23,7 @@ class MinCutTest(unittest.TestCase):
         graph = Graph(self.data)
         mincut = MinCut(graph)
 
-        self.assertEqual(mincut.size(), 1)
-        self.assertIn(4, mincut.mincut())
-
+        self.assertEqual(mincut.mincut(), 1)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,52 +1,54 @@
-import copy
 import random
-import math
 
 
 class MinCut:
     """
     Compute the minimum cut of a connected graph using Karger's algorithm
+    with edge contraction
     """
 
-    def __init__(self, graph, iters=lambda n: int(n**2 * math.log(n))):
+    def __init__(self, graph, runs=lambda n: 2*n):
         """
         Compute the minimum cut for a given graph,
-        with number of iterations defined by iters function
+        with number of iterations defined by runs function
         """
 
-        self._min_graph = None
-        for i in range(iters(graph.count_vertices())):
-            g = self._find_mincut(copy.deepcopy(graph))
-            if self._is_better_cut(g):
-                self._min_graph = g
+        self._graph = graph
+        self._mincut = None
 
-    def _is_better_cut(self, graph):
-        return self._min_graph is None or self._size(graph) < self.size()
+        for i in range(runs(graph.v())):
+            cut = self._find_mincut()
+            if self._mincut is None or self._mincut > cut:
+                self._mincut = cut
 
-    @staticmethod
-    def _find_mincut(graph):
-        while graph.count_vertices() > 2:
+    def _find_mincut(self):
+        v = self._graph.v()
+        edges = list(self._graph.edges())
+
+        def pick():
+            e = random.choice(edges)
+            return e if e[0] != e[1] else pick()
+
+        while v > 2:
             # pick a random edge and contract
-            u = random.choice(graph.vertices())
-            v = random.choice(tuple(set(graph.edges(u))))
-            graph.contract_edge(u, v)
+            p, q = pick()
+            # replace p--q connections with r--q ones
+            for i in range(len(edges)):
+                edge = edges[i]
+                if p in edge:
+                    r = edge[0] if edge[0] != p else edge[1]
+                    edges[i] = r, q
 
-        return graph
+            # remove self-loops (v--v)
+            edges = [x for x in edges if x[0] != x[1]]
+
+            v -= 1
+
+        return len(edges)
 
     def mincut(self):
         """
         Return the mincut
         """
 
-        return self._min_graph.vertices()
-
-    @staticmethod
-    def _size(graph):
-        return graph.count_edges(graph.vertices()[0])
-
-    def size(self):
-        """
-        Return a number of edges for a computed mincut
-        """
-
-        return self._size(self._min_graph)
+        return self._mincut
