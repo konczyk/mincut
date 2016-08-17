@@ -13,4 +13,4 @@ the default number of iterations:
 
     $ ./client.py graph.txt
 
-    17
+    3
